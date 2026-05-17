@@ -1,0 +1,12 @@
+# WordPress core (DON'T push full WP install)
+../
+!.gitignore
+
+# OS files
+.DS_Store
+
+# Node modules (if any)
+node_modules/
+
+# Logs
+*.log
