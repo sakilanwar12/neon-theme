@@ -13,73 +13,117 @@ get_header();
 <div id="primary" class="content-area">
 	<main id="main" class="site-main">
 
-		<div class="container">
-			<div class="newspaper-layout">
-
-				<!-- Featured Post (Hero) -->
-				<section class="featured-post-section">
+		<!-- Breaking News Bar (Full Width) -->
+		<section class="breaking-news-bar">
+			<div class="container">
+				<span class="breaking-title"><?php esc_html_e( 'Latest News', 'neon-theme' ); ?></span>
+				<div class="breaking-posts">
 					<?php
-					$featured = new WP_Query( array(
-						'posts_per_page'      => 1,
+					$latest = new WP_Query( array(
+						'posts_per_page'      => 8,
 						'ignore_sticky_posts' => true,
 					) );
-					if ( $featured->have_posts() ) : while ( $featured->have_posts() ) : $featured->the_post(); ?>
-						<article class="featured-post">
-							<?php if ( has_post_thumbnail() ) : ?>
-								<div class="featured-thumbnail">
-									<a href="<?php the_permalink(); ?>">
-										<?php the_post_thumbnail( 'full' ); ?>
-									</a>
-								</div>
-							<?php endif; ?>
-							<div class="featured-content">
-								<div class="featured-categories">
-									<?php $categories = get_the_category(); foreach ( $categories as $cat ) : ?>
-										<a href="<?php echo esc_url( get_category_link( $cat->term_id ) ); ?>" class="category-badge"><?php echo esc_html( $cat->name ); ?></a>
-									<?php endforeach; ?>
-								</div>
-								<h2 class="featured-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-								<div class="featured-meta">
-									<span class="featured-date"><?php echo get_the_date(); ?></span>
-									<span class="featured-author"><?php esc_html_e( 'By', 'neon-theme' ); ?> <?php the_author(); ?></span>
-								</div>
-								<p class="featured-excerpt"><?php echo wp_trim_words( get_the_excerpt(), 30 ); ?></p>
-								<a href="<?php the_permalink(); ?>" class="btn btn-primary"><?php esc_html_e( 'Read More', 'neon-theme' ); ?></a>
-							</div>
-						</article>
-					<?php endwhile; wp_reset_postdata(); endif; ?>
-				</section>
-
-				<!-- Breaking News Bar -->
-				<section class="breaking-news-bar">
-					<span class="breaking-title"><?php esc_html_e( 'Latest News', 'neon-theme' ); ?></span>
-					<div class="breaking-posts">
-						<?php
-						$latest = new WP_Query( array(
-							'posts_per_page'      => 5,
-							'ignore_sticky_posts' => true,
-							'offset'              => 1,
-						) );
-						if ( $latest->have_posts() ) : while ( $latest->have_posts() ) : $latest->the_post(); ?>
+					if ( $latest->have_posts() ) :
+						while ( $latest->have_posts() ) : $latest->the_post(); ?>
 							<span class="breaking-item">
 								<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
 								<span class="breaking-sep">|</span>
 							</span>
-						<?php endwhile; wp_reset_postdata(); endif; ?>
-					</div>
-				</section>
+						<?php endwhile;
+						wp_reset_postdata();
+					endif;
+					?>
+				</div>
+			</div>
+		</section>
 
-				<!-- Main Content Area: Grid Posts + Sidebar -->
-				<div class="content-with-sidebar">
+		<!-- Hero Masonry Grid (Full Width) -->
+		<section class="hero-masonry">
+			<div class="container">
+				<div class="masonry-grid">
+					<?php
+					$hero_posts = new WP_Query( array(
+						'posts_per_page'      => 6,
+						'ignore_sticky_posts' => true,
+					) );
+					$count = 0;
+					if ( $hero_posts->have_posts() ) :
+						while ( $hero_posts->have_posts() ) : $hero_posts->the_post();
+							$count++;
+							$class = 'masonry-item';
+							if ( $count === 1 ) $class .= ' masonry-featured';
+							elseif ( $count <= 3 ) $class .= ' masonry-medium';
+							else $class .= ' masonry-small';
+							?>
+							<article class="<?php echo $class; ?>">
+								<a href="<?php the_permalink(); ?>" class="masonry-link">
+									<?php if ( has_post_thumbnail() && $count <= 3 ) : ?>
+										<div class="masonry-thumb">
+											<?php the_post_thumbnail( $count === 1 ? 'full' : 'medium_large' ); ?>
+										</div>
+									<?php endif; ?>
+									<div class="masonry-body">
+										<?php $cats = get_the_category(); if ( ! empty( $cats ) ) : ?>
+											<span class="masonry-cat"><?php echo esc_html( $cats[0]->name ); ?></span>
+										<?php endif; ?>
+										<h3 class="masonry-title"><?php the_title(); ?></h3>
+										<?php if ( $count === 1 ) : ?>
+											<p class="masonry-excerpt"><?php echo wp_trim_words( get_the_excerpt(), 25 ); ?></p>
+										<?php endif; ?>
+										<span class="masonry-date"><?php echo get_the_date(); ?></span>
+									</div>
+								</a>
+							</article>
+						<?php endwhile;
+						wp_reset_postdata();
+					endif;
+					?>
+				</div>
+			</div>
+		</section>
 
-					<div class="content-main">
+		<!-- Secondary Featured (Full Width) -->
+		<section class="secondary-featured">
+			<div class="container">
+				<?php
+				$sec = new WP_Query( array(
+					'posts_per_page'      => 4,
+					'offset'              => 6,
+					'ignore_sticky_posts' => true,
+				) );
+				if ( $sec->have_posts() ) :
+					while ( $sec->have_posts() ) : $sec->the_post(); ?>
+						<article class="sec-post-card">
+							<?php if ( has_post_thumbnail() ) : ?>
+								<div class="sec-thumb">
+									<a href="<?php the_permalink(); ?>"><?php the_post_thumbnail( 'medium' ); ?></a>
+								</div>
+							<?php endif; ?>
+							<div class="sec-body">
+								<?php $scats = get_the_category(); if ( ! empty( $scats ) ) : ?>
+									<a href="<?php echo esc_url( get_category_link( $scats[0]->term_id ) ); ?>" class="category-badge category-badge-sm"><?php echo esc_html( $scats[0]->name ); ?></a>
+								<?php endif; ?>
+								<h3 class="sec-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+								<p class="sec-excerpt"><?php echo wp_trim_words( get_the_excerpt(), 12 ); ?></p>
+							</div>
+						</article>
+					<?php endwhile;
+					wp_reset_postdata();
+				endif;
+				?>
+			</div>
+		</section>
 
-						<!-- Category Sections -->
+		<!-- Newspaper Content Grid (Full Width) -->
+		<div class="newspaper-content-grid">
+			<div class="container">
+				<div class="grid-inner">
+					<div class="col-main">
 						<?php
-						$categories = get_categories( array( 'hide_empty' => true, 'number' => 3 ) );
+						$categories = get_categories( array( 'hide_empty' => true, 'number' => 4 ) );
 						foreach ( $categories as $category ) :
 							$cat_posts = new WP_Query( array(
-								'posts_per_page'      => 4,
+								'posts_per_page'      => 6,
 								'cat'                 => $category->term_id,
 								'ignore_sticky_posts' => true,
 							) );
@@ -90,51 +134,35 @@ get_header();
 										<h2 class="section-title-left">
 											<a href="<?php echo esc_url( get_category_link( $category->term_id ) ); ?>"><?php echo esc_html( $category->name ); ?></a>
 										</h2>
-										<a href="<?php echo esc_url( get_category_link( $category->term_id ) ); ?>" class="view-all-link"><?php esc_html_e( 'View All', 'neon-theme' ); ?> &rarr;</a>
 									</div>
-									<div class="category-posts-grid">
+									<div class="news-grid">
 										<?php
-										$count = 0;
+										$i = 0;
 										while ( $cat_posts->have_posts() ) : $cat_posts->the_post();
-											$count++;
-											if ( $count === 1 ) :
-												// First post: large
-												?>
-												<article class="post-card post-card-large">
-													<?php if ( has_post_thumbnail() ) : ?>
-														<a href="<?php the_permalink(); ?>" class="post-card-thumb">
-															<?php the_post_thumbnail( 'large' ); ?>
-														</a>
-													<?php endif; ?>
-													<div class="post-card-body">
-														<h3 class="post-card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-														<div class="post-card-meta">
-															<span class="post-card-date"><?php echo get_the_date(); ?></span>
-														</div>
-														<p class="post-card-excerpt"><?php echo wp_trim_words( get_the_excerpt(), 20 ); ?></p>
+											$i++;
+											if ( $i <= 3 ) :
+											?>
+											<article class="news-card news-card-medium">
+												<?php if ( has_post_thumbnail() ) : ?>
+													<div class="news-thumb">
+														<a href="<?php the_permalink(); ?>"><?php the_post_thumbnail( 'medium' ); ?></a>
 													</div>
-												</article>
-												<?php
-											else :
-												// Remaining posts: small
-												?>
-												<article class="post-card post-card-small">
-													<?php if ( has_post_thumbnail() ) : ?>
-														<a href="<?php the_permalink(); ?>" class="post-card-thumb">
-															<?php the_post_thumbnail( 'medium' ); ?>
-														</a>
-													<?php endif; ?>
-													<div class="post-card-body">
-														<h3 class="post-card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-														<div class="post-card-meta">
-															<span class="post-card-date"><?php echo get_the_date(); ?></span>
-														</div>
-													</div>
-												</article>
-												<?php
-											endif;
-										endwhile;
-										wp_reset_postdata();
+												<?php endif; ?>
+												<div class="news-body">
+													<h3 class="news-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+													<p class="news-excerpt"><?php echo wp_trim_words( get_the_excerpt(), 14 ); ?></p>
+													<div class="news-meta"><?php echo get_the_date(); ?></div>
+												</div>
+											</article>
+										<?php else : ?>
+											<article class="news-card">
+												<div class="news-body">
+													<h3 class="news-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+													<div class="news-meta"><?php echo get_the_date(); ?></div>
+												</div>
+											</article>
+										<?php endif; endwhile;
+											wp_reset_postdata();
 										?>
 									</div>
 								</section>
@@ -142,72 +170,145 @@ get_header();
 							endif;
 						endforeach;
 						?>
-
-						<!-- Latest Posts Grid -->
-						<section class="latest-posts-section">
-							<div class="section-header">
-								<h2 class="section-title-left"><?php esc_html_e( 'Latest Articles', 'neon-theme' ); ?></h2>
-							</div>
-							<div class="posts-grid">
-								<?php
-								$latest_posts = new WP_Query( array(
-									'posts_per_page'      => 9,
-									'ignore_sticky_posts' => true,
-									'offset'              => 1,
-								) );
-								if ( $latest_posts->have_posts() ) :
-									while ( $latest_posts->have_posts() ) : $latest_posts->the_post(); ?>
-										<article class="post-card post-card-default">
-											<?php if ( has_post_thumbnail() ) : ?>
-												<a href="<?php the_permalink(); ?>" class="post-card-thumb">
-													<?php the_post_thumbnail( 'medium_large' ); ?>
-												</a>
-											<?php endif; ?>
-											<div class="post-card-body">
-												<div class="post-card-categories">
-													<?php $cats = get_the_category(); foreach ( $cats as $c ) : ?>
-														<a href="<?php echo esc_url( get_category_link( $c->term_id ) ); ?>" class="post-cat"><?php echo esc_html( $c->name ); ?></a>
-													<?php endforeach; ?>
-												</div>
-												<h3 class="post-card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-												<div class="post-card-meta">
-													<span class="post-card-date"><?php echo get_the_date(); ?></span>
-													<span class="post-card-comments"><a href="<?php comments_link(); ?>"><?php comments_number( '0', '1', '%' ); ?> <?php esc_html_e( 'Comments', 'neon-theme' ); ?></a></span>
-												</div>
-												<p class="post-card-excerpt"><?php echo wp_trim_words( get_the_excerpt(), 15 ); ?></p>
-											</div>
-										</article>
-									<?php endwhile;
-									wp_reset_postdata();
-								endif;
-								?>
-							</div>
-						</section>
-
-						<!-- Pagination -->
-						<div class="pagination-wrapper">
-							<?php
-							$big = 999999999;
-							echo paginate_links( array(
-								'base'    => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
-								'format'  => '?paged=%#%',
-								'current' => max( 1, get_query_var( 'paged' ) ),
-								'total'   => $latest_posts->max_num_pages,
-							) );
-							?>
-						</div>
-
 					</div>
 
-					<!-- Sidebar -->
-					<aside class="content-sidebar">
+					<div class="col-sidebar">
 						<?php get_sidebar(); ?>
-					</aside>
-
+					</div>
 				</div>
-
 			</div>
 		</div>
+
+		<!-- More Top Stories (Full Width) -->
+		<section class="more-top-stories">
+			<div class="container">
+				<div class="section-header">
+					<h2 class="section-title-left"><?php esc_html_e( 'More Top Stories', 'neon-theme' ); ?></h2>
+				</div>
+				<div class="stories-row">
+					<?php
+					$more_stories = new WP_Query( array(
+						'posts_per_page'      => 9,
+						'offset'              => 10,
+						'ignore_sticky_posts' => true,
+					) );
+					if ( $more_stories->have_posts() ) :
+						while ( $more_stories->have_posts() ) : $more_stories->the_post(); ?>
+							<article class="story-card">
+								<?php if ( has_post_thumbnail() ) : ?>
+									<div class="story-thumb">
+										<a href="<?php the_permalink(); ?>"><?php the_post_thumbnail( 'thumbnail' ); ?></a>
+									</div>
+								<?php endif; ?>
+								<h4 class="story-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+							</article>
+						<?php endwhile;
+						wp_reset_postdata();
+					endif;
+					?>
+				</div>
+			</div>
+		</section>
+
+		<!-- Opinion Section (Full Width) -->
+		<section class="opinion-section">
+			<div class="container">
+				<div class="section-header">
+					<h2 class="section-title-left"><?php esc_html_e( 'Opinion', 'neon-theme' ); ?></h2>
+				</div>
+				<div class="opinion-grid">
+					<?php
+					$opinion = new WP_Query( array(
+						'posts_per_page'      => 5,
+						'category_name'      => 'opinion',
+						'ignore_sticky_posts' => true,
+					) );
+					if ( $opinion->have_posts() ) :
+						while ( $opinion->have_posts() ) : $opinion->the_post(); ?>
+							<article class="opinion-card">
+								<?php if ( has_post_thumbnail() ) : ?>
+									<div class="opinion-thumb">
+										<a href="<?php the_permalink(); ?>"><?php the_post_thumbnail( 'thumbnail' ); ?></a>
+									</div>
+								<?php endif; ?>
+								<h4 class="opinion-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+								<p class="opinion-author"><?php the_author(); ?></p>
+							</article>
+						<?php endwhile;
+						wp_reset_postdata();
+					endif;
+					?>
+				</div>
+			</div>
+		</section>
+
+		<!-- Pictures Section (Full Width) -->
+		<section class="pictures-section">
+			<div class="container">
+				<div class="section-header">
+					<h2 class="section-title-left"><?php esc_html_e( 'Pictures', 'neon-theme' ); ?></h2>
+				</div>
+				<div class="pictures-grid">
+					<?php
+					$pics = new WP_Query( array(
+						'posts_per_page'      => 8,
+						'meta_key'           => '_thumbnail_id',
+						'ignore_sticky_posts' => true,
+					) );
+					if ( $pics->have_posts() ) :
+						while ( $pics->have_posts() ) : $pics->the_post(); ?>
+							<article class="pic-card">
+								<?php if ( has_post_thumbnail() ) : ?>
+									<a href="<?php the_permalink(); ?>"><?php the_post_thumbnail( 'medium' ); ?></a>
+								<?php endif; ?>
+								<h4 class="pic-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+							</article>
+						<?php endwhile;
+						wp_reset_postdata();
+					endif;
+					?>
+				</div>
+			</div>
+		</section>
+
+		<!-- Sports Section (Full Width) -->
+		<section class="sports-section">
+			<div class="container">
+				<div class="section-header">
+					<h2 class="section-title-left"><?php esc_html_e( 'Sports', 'neon-theme' ); ?></h2>
+				</div>
+				<div class="sports-grid">
+					<?php
+					$sports = new WP_Query( array(
+						'posts_per_page'      => 6,
+						'category_name'      => 'sports',
+						'ignore_sticky_posts' => true,
+					) );
+					if ( $sports->have_posts() ) :
+						$s = 0;
+						while ( $sports->have_posts() ) : $sports->the_post();
+							$s++;
+							if ( $s === 1 ) :
+					?>
+						<article class="sports-main">
+							<?php if ( has_post_thumbnail() ) : ?>
+								<div class="sports-thumb">
+									<a href="<?php the_permalink(); ?>"><?php the_post_thumbnail( 'full' ); ?></a>
+								</div>
+							<?php endif; ?>
+							<h3 class="sports-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+						</article>
+						<div class="sports-list">
+					<?php else : ?>
+						<article class="sports-item">
+							<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+						</article>
+					<?php endif; endwhile; ?>
+						</div>
+					<?php wp_reset_postdata(); endif; ?>
+				</div>
+			</div>
+		</section>
 
 	</main>
 </div>
