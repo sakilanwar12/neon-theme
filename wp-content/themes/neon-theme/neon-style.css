@@ -957,53 +957,7 @@ label {
 	margin-bottom: var(--spacing-md);
 }
 
-/*--------------------------------------------------------------
-# Breaking News Bar
---------------------------------------------------------------*/
 
-.breaking-news-bar {
-	display: flex;
-	align-items: center;
-	gap: var(--spacing-md);
-	border: 1px solid var(--border);
-	border-left: 3px solid var(--accent);
-	padding: 0.6rem var(--spacing-md);
-	margin-bottom: var(--spacing-xl);
-	overflow: hidden;
-}
-
-.breaking-title {
-	color: var(--accent);
-	font-size: 0.6875rem;
-	font-weight: 700;
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
-	white-space: nowrap;
-}
-
-.breaking-posts {
-	display: flex;
-	gap: var(--spacing-sm);
-	overflow-x: auto;
-	white-space: nowrap;
-	padding-bottom: 2px;
-}
-
-.breaking-item a {
-	color: var(--text-secondary);
-	font-size: 0.8125rem;
-	text-decoration: none;
-	transition: color var(--transition-fast);
-}
-
-.breaking-item a:hover {
-	color: var(--accent);
-}
-
-.breaking-sep {
-	color: var(--border);
-	margin-left: var(--spacing-sm);
-}
 
 /*--------------------------------------------------------------
 # Category Sections

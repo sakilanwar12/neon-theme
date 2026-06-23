@@ -386,14 +386,6 @@ a, button {
 		display: none;
 	}
 
-	/* Breaking News Bar */
-	.breaking-news-bar {
-		flex-direction: column;
-		align-items: flex-start;
-		gap: var(--spacing-xs);
-		padding: var(--spacing-sm) var(--spacing-md);
-	}
-
 	/* Category Posts Grid */
 	.category-posts-grid {
 		grid-template-columns: 1fr;

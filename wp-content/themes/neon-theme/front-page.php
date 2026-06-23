@@ -13,29 +13,7 @@ get_header();
 <div id="primary" class="content-area">
 	<main id="main" class="site-main">
 
-		<!-- Breaking News Bar (Full Width) -->
-		<section class="breaking-news-bar">
-			<div class="container">
-				<span class="breaking-title"><?php esc_html_e( 'Latest News', 'neon-theme' ); ?></span>
-				<div class="breaking-posts">
-					<?php
-					$latest = new WP_Query( array(
-						'posts_per_page'      => 8,
-						'ignore_sticky_posts' => true,
-					) );
-					if ( $latest->have_posts() ) :
-						while ( $latest->have_posts() ) : $latest->the_post(); ?>
-							<span class="breaking-item">
-								<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-								<span class="breaking-sep">|</span>
-							</span>
-						<?php endwhile;
-						wp_reset_postdata();
-					endif;
-					?>
-				</div>
-			</div>
-		</section>
+
 
 		<!-- Hero Masonry Grid (Full Width) -->
 		<section class="hero-masonry">
