@@ -200,8 +200,8 @@ function neon_theme_scripts() {
 	// Enqueue responsive styles
 	wp_enqueue_style( 'neon-responsive', get_template_directory_uri() . '/assets/css/neon-responsive.css', array(), _S_VERSION );
 
-	// Enqueue Google Fonts (Inter and Poppins)
-	wp_enqueue_style( 'google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap', array(), null );
+	// Enqueue Google Fonts
+	wp_enqueue_style( 'google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&family=Roboto:wght@400;500;700&display=swap', array(), null );
 
 	// Enqueue navigation script
 	wp_enqueue_script( 'neon-theme-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
