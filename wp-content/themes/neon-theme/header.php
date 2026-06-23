@@ -61,9 +61,14 @@
 							?>
 						</nav>
 					<?php endif; ?>
-					<button class="search-toggle" aria-label="<?php esc_attr_e( 'Toggle search', 'neon-theme' ); ?>">
-						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-					</button>
+					<div class="search-box">
+						<button class="search-toggle" aria-label="<?php esc_attr_e( 'Toggle search', 'neon-theme' ); ?>">
+							<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+						</button>
+						<div class="search-popover">
+							<?php get_search_form(); ?>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -118,10 +123,4 @@
 		</div>
 	</header>
 
-	<!-- Search overlay -->
-	<div class="search-overlay" style="display:none;">
-		<div class="search-overlay-inner">
-			<button class="search-close">&times;</button>
-			<?php get_search_form(); ?>
-		</div>
-	</div>
+

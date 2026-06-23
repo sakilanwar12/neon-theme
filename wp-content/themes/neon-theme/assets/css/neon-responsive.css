@@ -531,8 +531,13 @@ a, button {
 		grid-template-columns: 1fr;
 	}
 
-	.search-overlay-inner .search-form {
-		flex-direction: column;
+	.search-popover {
+		width: 300px;
+		right: -10px;
+	}
+
+	.search-popover .search-form {
+		flex-direction: row;
 	}
 
 	.footer-newsletter {
@@ -542,5 +547,13 @@ a, button {
 	.category-badge {
 		font-size: 0.6875rem;
 		padding: 3px 8px;
+	}
+
+	.search-popover {
+		position: fixed;
+		top: 60px;
+		left: var(--spacing-md);
+		right: var(--spacing-md);
+		width: auto;
 	}
 }
