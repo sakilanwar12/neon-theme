@@ -2,56 +2,79 @@
 /**
  * The main template file
  *
- * This is the most generic template file in a WordPress theme
- * and one of the two required files for a theme (the other being style.css).
- * It is used to display a page when nothing more specific matches a query.
- * E.g., it puts together the home page when no home.php file exists.
- *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
  * @package NEON_THEME
  */
 
 get_header();
 ?>
 
-	<main id="primary" class="site-main">
+<main id="primary" class="site-main">
+	<div class="container">
+		<div class="content-with-sidebar">
 
-		<?php
-		if ( have_posts() ) :
-
-			if ( is_home() && ! is_front_page() ) :
-				?>
-				<header>
-					<h1 class="page-title screen-reader-text"><?php single_post_title(); ?></h1>
+			<div class="content-main">
+				<header class="page-header-archive">
+					<h1 class="page-title">
+						<?php
+						if ( is_home() && ! is_front_page() ) {
+							single_post_title();
+						} elseif ( is_archive() ) {
+							the_archive_title();
+						} else {
+							esc_html_e( 'Latest News', 'neon-theme' );
+						}
+						?>
+					</h1>
+					<?php if ( is_archive() ) { the_archive_description( '<div class="archive-description">', '</div>' ); } ?>
 				</header>
-				<?php
-			endif;
 
-			/* Start the Loop */
-			while ( have_posts() ) :
-				the_post();
+				<?php if ( have_posts() ) : ?>
+					<div class="posts-grid">
+						<?php
+						while ( have_posts() ) :
+							the_post();
+							?>
+							<article id="post-<?php the_ID(); ?>" <?php post_class( 'post-card post-card-default' ); ?>>
+								<?php if ( has_post_thumbnail() ) : ?>
+									<a href="<?php the_permalink(); ?>" class="post-card-thumb">
+										<?php the_post_thumbnail( 'medium_large' ); ?>
+									</a>
+								<?php endif; ?>
+								<div class="post-card-body">
+									<div class="post-card-categories">
+										<?php $categories = get_the_category(); foreach ( $categories as $cat ) : ?>
+											<a href="<?php echo esc_url( get_category_link( $cat->term_id ) ); ?>" class="post-cat"><?php echo esc_html( $cat->name ); ?></a>
+										<?php endforeach; ?>
+									</div>
+									<h3 class="post-card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+									<div class="post-card-meta">
+										<span class="post-card-date"><?php echo get_the_date(); ?></span>
+										<span class="post-card-author"><?php esc_html_e( 'By', 'neon-theme' ); ?> <?php the_author(); ?></span>
+									</div>
+									<p class="post-card-excerpt"><?php echo wp_trim_words( get_the_excerpt(), 20 ); ?></p>
+									<a href="<?php the_permalink(); ?>" class="read-more-link"><?php esc_html_e( 'Read More', 'neon-theme' ); ?> &rarr;</a>
+								</div>
+							</article>
+						<?php endwhile; ?>
+					</div>
 
-				/*
-				 * Include the Post-Type-specific template for the content.
-				 * If you want to override this in a child theme, then include a file
-				 * called content-___.php (where ___ is the Post Type name) and that will be used instead.
-				 */
-				get_template_part( 'template-parts/content', get_post_type() );
+					<div class="pagination-wrapper">
+						<?php the_posts_pagination(); ?>
+					</div>
 
-			endwhile;
+				<?php else : ?>
+					<?php get_template_part( 'template-parts/content', 'none' ); ?>
+				<?php endif; ?>
+			</div>
 
-			the_posts_navigation();
+			<aside class="content-sidebar">
+				<?php get_sidebar(); ?>
+			</aside>
 
-		else :
-
-			get_template_part( 'template-parts/content', 'none' );
-
-		endif;
-		?>
-
-	</main><!-- #main -->
+		</div>
+	</div>
+</main>
 
 <?php
-get_sidebar();
 get_footer();

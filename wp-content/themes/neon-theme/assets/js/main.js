@@ -1,8 +1,3 @@
-/**
- * Neon Theme - Main JavaScript
- * Handles interactions, animations, and mobile menu
- */
-
 (function() {
 	'use strict';
 
@@ -22,29 +17,72 @@
 	const navLinks = document.querySelectorAll('.main-navigation a');
 	navLinks.forEach(link => {
 		link.addEventListener('click', function() {
-			if (mainNav.classList.contains('toggled')) {
+			if (mainNav && mainNav.classList.contains('toggled')) {
 				mainNav.classList.remove('toggled');
-				menuToggle.setAttribute('aria-expanded', false);
+				if (menuToggle) menuToggle.setAttribute('aria-expanded', false);
 			}
 		});
 	});
+
+	// Add dropdown toggles to menu items with children
+	document.querySelectorAll('.main-navigation .menu-item-has-children').forEach(item => {
+		if (!item.querySelector('.dropdown-toggle')) {
+			const toggle = document.createElement('button');
+			toggle.className = 'dropdown-toggle';
+			toggle.setAttribute('aria-expanded', 'false');
+			toggle.setAttribute('aria-label', 'Toggle submenu');
+			toggle.innerHTML = '<span class="dropdown-arrow"></span>';
+			item.appendChild(toggle);
+
+			toggle.addEventListener('click', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				item.classList.toggle('active');
+				const expanded = this.getAttribute('aria-expanded') === 'true';
+				this.setAttribute('aria-expanded', !expanded);
+				this.classList.toggle('active');
+			});
+		}
+	});
+
+	// Search Overlay
+	const searchToggle = document.querySelector('.search-toggle');
+	const searchOverlay = document.querySelector('.search-overlay');
+	const searchOverlayClose = document.querySelector('.search-close');
+	if (searchToggle && searchOverlay) {
+		searchToggle.addEventListener('click', function(e) {
+			e.preventDefault();
+			searchOverlay.style.display = 'flex';
+			setTimeout(() => searchOverlay.querySelector('input')?.focus(), 100);
+		});
+		if (searchOverlayClose) {
+			searchOverlayClose.addEventListener('click', function() {
+				searchOverlay.style.display = 'none';
+			});
+		}
+		searchOverlay.addEventListener('click', function(e) {
+			if (e.target === this) {
+				this.style.display = 'none';
+			}
+		});
+		document.addEventListener('keydown', function(e) {
+			if (e.key === 'Escape' && searchOverlay.style.display !== 'none') {
+				searchOverlay.style.display = 'none';
+			}
+		});
+	}
 
 	// Smooth Scroll Navigation
 	document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 		anchor.addEventListener('click', function(e) {
 			const href = this.getAttribute('href');
-			
-			// Only smooth scroll if the target exists
 			if (href !== '#' && document.querySelector(href)) {
 				e.preventDefault();
 				const target = document.querySelector(href);
-				
 				target.scrollIntoView({
 					behavior: 'smooth',
 					block: 'start'
 				});
-
-				// Update URL without triggering navigation
 				history.pushState(null, null, href);
 			}
 		});
@@ -65,19 +103,22 @@
 		});
 	}, observerOptions);
 
-	// Observe elements with animation classes
-	document.querySelectorAll('.section, .card, .post').forEach(el => {
+	document.querySelectorAll('.section, .card, .post, .post-card').forEach(el => {
 		observer.observe(el);
 	});
 
-	// Scroll to Top Button (if implemented)
+	// Scroll to Top Button
 	const scrollTopButton = document.querySelector('.scroll-to-top');
 	if (scrollTopButton) {
 		window.addEventListener('scroll', function() {
 			if (window.pageYOffset > 300) {
 				scrollTopButton.classList.add('visible');
+				scrollTopButton.style.opacity = '1';
+				scrollTopButton.style.pointerEvents = 'auto';
 			} else {
 				scrollTopButton.classList.remove('visible');
+				scrollTopButton.style.opacity = '0';
+				scrollTopButton.style.pointerEvents = 'none';
 			}
 		});
 
@@ -93,7 +134,6 @@
 	const menuItems = document.querySelectorAll('.main-navigation li');
 	menuItems.forEach((item, index) => {
 		const link = item.querySelector('a');
-		
 		if (link) {
 			link.addEventListener('keydown', function(e) {
 				if (e.key === 'ArrowRight' && index < menuItems.length - 1) {
@@ -108,18 +148,16 @@
 		}
 	});
 
-	// Lazy load images (for better performance)
+	// Lazy load images
 	if ('IntersectionObserver' in window) {
 		const imageObserver = new IntersectionObserver((entries, observer) => {
 			entries.forEach(entry => {
 				if (entry.isIntersecting) {
 					const img = entry.target;
-					
 					if (img.dataset.src) {
 						img.src = img.dataset.src;
 						img.removeAttribute('data-src');
 					}
-					
 					imageObserver.unobserve(img);
 				}
 			});
@@ -134,7 +172,6 @@
 	function setActiveMenuItem() {
 		const currentLocation = location.pathname;
 		const menuItems = document.querySelectorAll('.main-navigation a');
-
 		menuItems.forEach(item => {
 			if (item.pathname === currentLocation) {
 				item.parentElement.classList.add('current-menu-item');
@@ -144,7 +181,6 @@
 		});
 	}
 
-	// Initialize active menu item on page load
 	document.addEventListener('DOMContentLoaded', setActiveMenuItem);
 
 	// Handle form focus states
@@ -153,53 +189,9 @@
 		input.addEventListener('focus', function() {
 			this.parentElement.classList.add('focused');
 		});
-
 		input.addEventListener('blur', function() {
 			this.parentElement.classList.remove('focused');
 		});
 	});
-
-	// Contact Form 7 - Enhance styling if present
-	if (typeof wpcf7 !== 'undefined') {
-		document.addEventListener('wpcf7:submit', function(event) {
-			// Add custom handling if needed
-		});
-	}
-
-	// Project Grid Filtering (if implemented)
-	const filterButtons = document.querySelectorAll('[data-filter]');
-	const projectItems = document.querySelectorAll('[data-project-category]');
-
-	if (filterButtons.length > 0) {
-		filterButtons.forEach(button => {
-			button.addEventListener('click', function() {
-				const filterValue = this.getAttribute('data-filter');
-
-				// Update active button
-				filterButtons.forEach(btn => btn.classList.remove('active'));
-				this.classList.add('active');
-
-				// Filter items
-				projectItems.forEach(item => {
-					if (filterValue === 'all' || item.getAttribute('data-project-category') === filterValue) {
-						item.style.display = 'block';
-						setTimeout(() => item.classList.add('fade-in'), 10);
-					} else {
-						item.style.display = 'none';
-						item.classList.remove('fade-in');
-					}
-				});
-			});
-		});
-	}
-
-	// Prevent form submission on enter in search boxes
-	document.addEventListener('keypress', function(e) {
-		if (e.target.classList.contains('search-field') && e.key === 'Enter') {
-			// Allow normal form submission
-		}
-	});
-
-	console.log('Neon Theme initialized');
 
 })();

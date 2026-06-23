@@ -3,51 +3,51 @@
  * The template for displaying search results pages
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#search-result
- *
  * @package NEON_THEME
  */
 
 get_header();
 ?>
 
-	<main id="primary" class="site-main">
+<main id="primary" class="site-main">
+	<div class="container">
+		<div class="content-with-sidebar">
 
-		<?php if ( have_posts() ) : ?>
+			<div class="content-main">
+				<header class="page-header-archive">
+					<h1 class="page-title">
+						<?php
+						printf( esc_html__( 'Search Results for: %s', 'neon-theme' ), '<span>' . get_search_query() . '</span>' );
+						?>
+					</h1>
+				</header>
 
-			<header class="page-header">
-				<h1 class="page-title">
-					<?php
-					/* translators: %s: search query. */
-					printf( esc_html__( 'Search Results for: %s', 'neon-theme' ), '<span>' . get_search_query() . '</span>' );
-					?>
-				</h1>
-			</header><!-- .page-header -->
+				<?php if ( have_posts() ) : ?>
+					<div class="posts-grid">
+						<?php
+						while ( have_posts() ) :
+							the_post();
+							get_template_part( 'template-parts/content', 'search' );
+						endwhile;
+						?>
+					</div>
 
-			<?php
-			/* Start the Loop */
-			while ( have_posts() ) :
-				the_post();
+					<div class="pagination-wrapper">
+						<?php the_posts_pagination(); ?>
+					</div>
 
-				/**
-				 * Run the loop for the search to output the results.
-				 * If you want to overload this in a child theme then include a file
-				 * called content-search.php and that will be used instead.
-				 */
-				get_template_part( 'template-parts/content', 'search' );
+				<?php else : ?>
+					<?php get_template_part( 'template-parts/content', 'none' ); ?>
+				<?php endif; ?>
+			</div>
 
-			endwhile;
+			<aside class="content-sidebar">
+				<?php get_sidebar(); ?>
+			</aside>
 
-			the_posts_navigation();
-
-		else :
-
-			get_template_part( 'template-parts/content', 'none' );
-
-		endif;
-		?>
-
-	</main><!-- #main -->
+		</div>
+	</div>
+</main>
 
 <?php
-get_sidebar();
 get_footer();

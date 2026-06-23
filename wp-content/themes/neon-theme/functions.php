@@ -46,11 +46,13 @@ function neon_theme_setup() {
 		*/
 	add_theme_support( 'post-thumbnails' );
 
-	// This theme uses wp_nav_menu() in two locations.
+	// This theme uses wp_nav_menu() in multiple locations.
 	register_nav_menus(
 		array(
 			'primary' => esc_html__( 'Primary Menu', 'neon-theme' ),
 			'social'  => esc_html__( 'Social Menu', 'neon-theme' ),
+			'top-bar' => esc_html__( 'Top Bar Menu', 'neon-theme' ),
+			'footer'  => esc_html__( 'Footer Menu', 'neon-theme' ),
 		)
 	);
 
@@ -104,12 +106,12 @@ function neon_theme_setup() {
 add_action( 'after_setup_theme', 'neon_theme_setup' );
 
 /**
- * Set the content width in pixels, based on the theme's design and stylesheet.
- *
- * Priority 0 to make it available to lower priority callbacks.
- *
- * @global int $content_width
- */
+  * Set the content width in pixels, based on the theme's design and stylesheet.
+  *
+  * Priority 0 to make it available to lower priority callbacks.
+  *
+  * @global int $content_width
+  */
 function neon_theme_content_width() {
 	$GLOBALS['content_width'] = apply_filters( 'neon_theme_content_width', 640 );
 }
@@ -130,6 +132,55 @@ function neon_theme_widgets_init() {
 			'after_widget'  => '</section>',
 			'before_title'  => '<h2 class="widget-title">',
 			'after_title'   => '</h2>',
+		)
+	);
+
+	// Footer widget areas for newspaper layout
+	register_sidebar(
+		array(
+			'name'          => esc_html__( 'Footer Column 1', 'neon-theme' ),
+			'id'            => 'footer-1',
+			'description'   => esc_html__( 'Footer widget area column 1', 'neon-theme' ),
+			'before_widget' => '<div id="%1$s" class="footer-widget %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h4 class="footer-widget-title">',
+			'after_title'   => '</h4>',
+		)
+	);
+
+	register_sidebar(
+		array(
+			'name'          => esc_html__( 'Footer Column 2', 'neon-theme' ),
+			'id'            => 'footer-2',
+			'description'   => esc_html__( 'Footer widget area column 2', 'neon-theme' ),
+			'before_widget' => '<div id="%1$s" class="footer-widget %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h4 class="footer-widget-title">',
+			'after_title'   => '</h4>',
+		)
+	);
+
+	register_sidebar(
+		array(
+			'name'          => esc_html__( 'Footer Column 3', 'neon-theme' ),
+			'id'            => 'footer-3',
+			'description'   => esc_html__( 'Footer widget area column 3', 'neon-theme' ),
+			'before_widget' => '<div id="%1$s" class="footer-widget %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h4 class="footer-widget-title">',
+			'after_title'   => '</h4>',
+		)
+	);
+
+	register_sidebar(
+		array(
+			'name'          => esc_html__( 'Footer Column 4', 'neon-theme' ),
+			'id'            => 'footer-4',
+			'description'   => esc_html__( 'Footer widget area column 4', 'neon-theme' ),
+			'before_widget' => '<div id="%1$s" class="footer-widget %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h4 class="footer-widget-title">',
+			'after_title'   => '</h4>',
 		)
 	);
 }

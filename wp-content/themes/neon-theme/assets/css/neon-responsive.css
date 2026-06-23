@@ -12,16 +12,16 @@
 
 .menu-toggle span {
 	display: block;
-	width: 25px;
+	width: 22px;
 	height: 2px;
-	background: var(--neon-cyan);
-	border-radius: 2px;
+	background: var(--text-primary);
+	border-radius: 1px;
 	transition: all var(--transition-fast);
 	transform-origin: center;
 }
 
 .menu-toggle:hover span {
-	background: var(--neon-pink);
+	background: var(--accent);
 }
 
 .menu-toggle:hover {
@@ -58,11 +58,13 @@
 		left: 0;
 		right: 0;
 		flex-direction: column;
-		background: var(--neon-dark-secondary);
-		border-bottom: 1px solid var(--neon-dark-border);
+		background: var(--bg-primary);
+		border-bottom: 1px solid var(--border);
 		padding: var(--spacing-md);
 		z-index: 9999;
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+		box-shadow: var(--shadow-lg);
+		overflow-y: auto;
+		max-height: calc(100vh - 70px);
 	}
 
 	.main-navigation.toggled ul li {
@@ -70,8 +72,8 @@
 	}
 
 	.main-navigation.toggled ul li a {
-		padding: var(--spacing-md);
-		border-bottom: 1px solid var(--neon-dark-border);
+		padding: var(--spacing-sm) var(--spacing-md);
+		border-bottom: 1px solid var(--border-light);
 	}
 
 	.site-header-content {
@@ -179,36 +181,36 @@ a, button {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-	width: 12px;
+	width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-	background: var(--neon-dark-bg);
+	background: var(--bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
-	background: var(--neon-dark-border);
-	border-radius: 6px;
+	background: var(--border);
+	border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: var(--neon-cyan);
+	background: var(--text-tertiary);
 }
 
 /* Selection Styling */
 ::selection {
-	background: var(--neon-cyan);
-	color: var(--neon-dark-bg);
+	background: var(--accent);
+	color: #fff;
 }
 
 ::-moz-selection {
-	background: var(--neon-cyan);
-	color: var(--neon-dark-bg);
+	background: var(--accent);
+	color: #fff;
 }
 
 /* Focus Visible for Accessibility */
 :focus-visible {
-	outline: 2px solid var(--neon-cyan);
+	outline: 2px solid var(--accent);
 	outline-offset: 2px;
 }
 
@@ -251,11 +253,11 @@ a, button {
 }
 
 .text-muted {
-	color: var(--neon-text-tertiary);
+	color: var(--text-tertiary);
 }
 
 .text-primary {
-	color: var(--neon-cyan);
+	color: var(--accent);
 }
 
 /* Margin Utilities */
@@ -312,5 +314,233 @@ a, button {
 
 	.entry-content {
 		max-width: 100%;
+	}
+}
+
+/*--------------------------------------------------------------
+# Newspaper Responsive Styles
+--------------------------------------------------------------*/
+
+/* Large Tablets (max 1024px) */
+@media (max-width: 1024px) {
+	.posts-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.posts-grid-3 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.footer-widgets-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.featured-thumbnail {
+		height: 380px;
+	}
+
+	.post-card-large .post-card-thumb {
+		height: 240px;
+	}
+
+	.content-with-sidebar {
+		grid-template-columns: 1fr 280px;
+		gap: var(--spacing-lg);
+	}
+}
+
+/* Tablets (max 768px) */
+@media (max-width: 768px) {
+	/* Top Bar */
+	.top-bar-date {
+		display: none;
+	}
+
+	.top-bar-breaking {
+		flex: none;
+		max-width: 60%;
+	}
+
+	.top-bar-nav {
+		display: none;
+	}
+
+	/* Featured Post */
+	.featured-post {
+		grid-template-columns: 1fr;
+	}
+
+	.featured-thumbnail {
+		height: 300px;
+	}
+
+	.featured-content {
+		padding: var(--spacing-md) 0;
+	}
+
+	.featured-title {
+		font-size: 1.5rem;
+	}
+
+	.featured-excerpt {
+		display: none;
+	}
+
+	/* Breaking News Bar */
+	.breaking-news-bar {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--spacing-xs);
+		padding: var(--spacing-sm) var(--spacing-md);
+	}
+
+	/* Category Posts Grid */
+	.category-posts-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.category-posts-grid .post-card-large {
+		grid-row: auto;
+	}
+
+	.post-card-large .post-card-thumb {
+		height: 200px;
+	}
+
+	/* Posts Grid */
+	.posts-grid,
+	.posts-grid-3 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	/* Content + Sidebar */
+	.content-with-sidebar {
+		grid-template-columns: 1fr;
+	}
+
+	/* Single Post */
+	.single-post-footer {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.post-navigation .nav-links {
+		grid-template-columns: 1fr;
+	}
+
+	/* Author Box */
+	.author-bio-box {
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	/* Footer */
+	.footer-widgets-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.footer-bottom-inner {
+		flex-direction: column;
+		text-align: center;
+	}
+
+	.footer-bottom-right {
+		flex-direction: column;
+	}
+
+	/* Dropdown Toggle for Mobile */
+	.dropdown-toggle {
+		display: block;
+	}
+
+	.main-navigation .menu-item-has-children {
+		position: relative;
+	}
+
+	.main-navigation .sub-menu {
+		position: static !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+		transform: none !important;
+		display: none !important;
+		box-shadow: none;
+		border: none;
+		padding-left: var(--spacing-md);
+		background: transparent;
+		left: auto !important;
+	}
+
+	.main-navigation .menu-item-has-children.active > .sub-menu {
+		display: block !important;
+	}
+
+	.main-navigation .sub-menu .sub-menu {
+		margin-left: 0;
+	}
+
+	.main-navigation .sub-menu .menu-item-has-children > a::after {
+		display: none;
+	}
+
+	.main-navigation .sub-menu a {
+		padding: 0.5rem 1rem;
+		border-bottom: none;
+		font-size: 0.875rem;
+	}
+
+	/* Hide dropdown arrow indicator on mobile */
+	.main-navigation .menu > .menu-item-has-children > a::after {
+		display: none;
+	}
+
+	.menu-label {
+		display: inline;
+		font-size: 0.75rem;
+	}
+}
+
+/* Mobile (max 480px) */
+@media (max-width: 480px) {
+	.featured-thumbnail {
+		height: 220px;
+	}
+
+	.featured-content {
+		padding: var(--spacing-md);
+	}
+
+	.featured-title {
+		font-size: 1.25rem;
+	}
+
+	.featured-meta {
+		font-size: 0.75rem;
+	}
+
+	.posts-grid,
+	.posts-grid-3 {
+		grid-template-columns: 1fr;
+	}
+
+	.post-card-thumb {
+		height: 180px;
+	}
+
+	.footer-widgets-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.search-overlay-inner .search-form {
+		flex-direction: column;
+	}
+
+	.footer-newsletter {
+		flex-direction: column;
+	}
+
+	.category-badge {
+		font-size: 0.6875rem;
+		padding: 3px 8px;
 	}
 }
